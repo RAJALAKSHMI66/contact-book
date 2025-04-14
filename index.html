@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Book</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Contact Book</h2>
+
+        <form action="/add" method="post">
+            <input type="text" name="name" placeholder="Enter Name" required>
+            <input type="text" name="phone" placeholder="Enter Phone Number" required>
+            <button type="submit">Add Contact</button>
+        </form>
+
+        <h3>Saved Contacts</h3>
+        <ul>
+            {% for contact in contacts %}
+                <li>{{ contact.name }} - {{ contact.phone }} 
+                    <a href="/delete/{{ contact.name }}" class="delete">Delete</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
