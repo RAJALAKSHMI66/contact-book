@@ -1,6 +1,5 @@
-from flask import Flask, render_template, request, redirect, jsonify
-import json
-import os
+from flask import Flask, render_template_string, request, redirect
+import json, os
 
 app = Flask(__name__)
 
@@ -21,18 +20,18 @@ def save_contacts(contacts):
 @app.route("/")
 def index():
     contacts = load_contacts()
-    return render_template("index.html", contacts=contacts)
+    with open("index.html", "r") as f:
+        html = f.read()
+    return render_template_string(html, contacts=contacts)
 
 @app.route("/add", methods=["POST"])
 def add_contact():
     name = request.form["name"]
     phone = request.form["phone"]
-
     if name and phone:
         contacts = load_contacts()
         contacts.append({"name": name, "phone": phone})
         save_contacts(contacts)
-    
     return redirect("/")
 
 @app.route("/delete/<name>")
@@ -41,6 +40,11 @@ def delete_contact(name):
     contacts = [contact for contact in contacts if contact["name"] != name]
     save_contacts(contacts)
     return redirect("/")
+
+@app.route("/style.css")
+def serve_css():
+    with open("style.css", "r") as f:
+        return f.read(), 200, {'Content-Type': 'text/css'}
 
 if __name__ == "__main__":
     app.run(debug=True)
