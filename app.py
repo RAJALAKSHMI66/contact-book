@@ -1,4 +1,4 @@
-from flask import Flask, render_template_string, request, redirect
+from flask import Flask, render_template, request, redirect
 import json, os
 
 app = Flask(__name__)
@@ -20,9 +20,7 @@ def save_contacts(contacts):
 @app.route("/")
 def index():
     contacts = load_contacts()
-    with open("index.html", "r") as f:
-        html = f.read()
-    return render_template_string(html, contacts=contacts)
+    return render_template("index.html", contacts=contacts)
 
 @app.route("/add", methods=["POST"])
 def add_contact():
